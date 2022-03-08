@@ -186,16 +186,18 @@ export const generateAgent = (
 Псионическая защита: 0 - 5
 Удача: 1 - 2
   */
+  var attributes = {};
+
   if(fraction == 0){
-      nft_hash["attributes"]["minDamage"] = 5 + getRandomInt(16);
-      nft_hash["attributes"]["maxDamage"] = 25 + getRandomInt(16);
-      nft_hash["attributes"]["HitPoints"] = 125 + getRandomInt(26);
-      nft_hash["attributes"]["Defence"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Evasion"] = 1 + getRandomInt(3);
-      nft_hash["attributes"]["Speed"] = 10 + getRandomInt(6);
-      nft_hash["attributes"]["PhysicalResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["PsionicResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["Fortune"] = 1 + getRandomInt(2);
+      attributes["minDamage"] = 5 + getRandomInt(16);
+      attributes["maxDamage"] = 25 + getRandomInt(16);
+      attributes["HitPoints"] = 125 + getRandomInt(26);
+      attributes["Defence"] = 5 + getRandomInt(6);
+      attributes["Evasion"] = 1 + getRandomInt(3);
+      attributes["Speed"] = 10 + getRandomInt(6);
+      attributes["PhysicalResistance"] = 0 + getRandomInt(6);
+      attributes["PsionicResistance"] = 0 + getRandomInt(6);
+      attributes["Fortune"] = 1 + getRandomInt(2);
   };
 /*
 Пикник:
@@ -210,15 +212,15 @@ export const generateAgent = (
 Удача: 5 - 10
 */
   if(fraction == 1){
-      nft_hash["attributes"]["minDamage"] = 5 + getRandomInt(16);
-      nft_hash["attributes"]["maxDamage"] = 25 + getRandomInt(16);
-      nft_hash["attributes"]["HitPoints"] = 70 + getRandomInt(31);
-      nft_hash["attributes"]["Defence"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Evasion"] = 1 + getRandomInt(3);
-      nft_hash["attributes"]["Speed"] = 10 + getRandomInt(6);
-      nft_hash["attributes"]["PhysicalResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["PsionicResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["Fortune"] = 5 + getRandomInt(6);
+      attributes["minDamage"] = 5 + getRandomInt(16);
+      attributes["maxDamage"] = 25 + getRandomInt(16);
+      attributes["HitPoints"] = 70 + getRandomInt(31);
+      attributes["Defence"] = 5 + getRandomInt(6);
+      attributes["Evasion"] = 1 + getRandomInt(3);
+      attributes["Speed"] = 10 + getRandomInt(6);
+      attributes["PhysicalResistance"] = 0 + getRandomInt(6);
+      attributes["PsionicResistance"] = 0 + getRandomInt(6);
+      attributes["Fortune"] = 5 + getRandomInt(6);
   };
 
 /*
@@ -234,15 +236,15 @@ export const generateAgent = (
 Удача: 1 - 2
 */
   if(fraction == 2){
-      nft_hash["attributes"]["minDamage"] = 5 + getRandomInt(16);
-      nft_hash["attributes"]["maxDamage"] = 25 + getRandomInt(16);
-      nft_hash["attributes"]["HitPoints"] = 70 + getRandomInt(31);
-      nft_hash["attributes"]["Defence"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Evasion"] = 1 + getRandomInt(3);
-      nft_hash["attributes"]["Speed"] = 10 + getRandomInt(6);
-      nft_hash["attributes"]["PhysicalResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["PsionicResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["Fortune"] = 1 + getRandomInt(2);
+      attributes["minDamage"] = 5 + getRandomInt(16);
+      attributes["maxDamage"] = 25 + getRandomInt(16);
+      attributes["HitPoints"] = 70 + getRandomInt(31);
+      attributes["Defence"] = 5 + getRandomInt(6);
+      attributes["Evasion"] = 1 + getRandomInt(3);
+      attributes["Speed"] = 10 + getRandomInt(6);
+      attributes["PhysicalResistance"] = 0 + getRandomInt(6);
+      attributes["PsionicResistance"] = 0 + getRandomInt(6);
+      attributes["Fortune"] = 1 + getRandomInt(2);
   };
 
 /*
@@ -259,15 +261,15 @@ export const generateAgent = (
 */
 
   if(fraction == 3){
-      nft_hash["attributes"]["minDamage"] = 5 + getRandomInt(16);
-      nft_hash["attributes"]["maxDamage"] = 25 + getRandomInt(16);
-      nft_hash["attributes"]["HitPoints"] = 70 + getRandomInt(31);
-      nft_hash["attributes"]["Defence"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Evasion"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Speed"] = 10 + getRandomInt(6);
-      nft_hash["attributes"]["PhysicalResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["PsionicResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["Fortune"] = 1 + getRandomInt(2);
+      attributes["minDamage"] = 5 + getRandomInt(16);
+      attributes["maxDamage"] = 25 + getRandomInt(16);
+      attributes["HitPoints"] = 70 + getRandomInt(31);
+      attributes["Defence"] = 5 + getRandomInt(6);
+      attributes["Evasion"] = 5 + getRandomInt(6);
+      attributes["Speed"] = 10 + getRandomInt(6);
+      attributes["PhysicalResistance"] = 0 + getRandomInt(6);
+      attributes["PsionicResistance"] = 0 + getRandomInt(6);
+      attributes["Fortune"] = 1 + getRandomInt(2);
   };
 
 /*
@@ -284,15 +286,15 @@ export const generateAgent = (
 */
 
   if(fraction == 4){
-      nft_hash["attributes"]["minDamage"] = 5 + getRandomInt(16);
-      nft_hash["attributes"]["maxDamage"] = 25 + getRandomInt(16);
-      nft_hash["attributes"]["HitPoints"] = 70 + getRandomInt(31);
-      nft_hash["attributes"]["Defence"] = 5 + getRandomInt(6);
-      nft_hash["attributes"]["Evasion"] = 1 + getRandomInt(3);
-      nft_hash["attributes"]["Speed"] = 20 + getRandomInt(6);
-      nft_hash["attributes"]["PhysicalResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["PsionicResistance"] = 0 + getRandomInt(6);
-      nft_hash["attributes"]["Fortune"] = 1 + getRandomInt(2);
+      attributes["minDamage"] = 5 + getRandomInt(16);
+      attributes["maxDamage"] = 25 + getRandomInt(16);
+      attributes["HitPoints"] = 70 + getRandomInt(31);
+      attributes["Defence"] = 5 + getRandomInt(6);
+      attributes["Evasion"] = 1 + getRandomInt(3);
+      attributes["Speed"] = 20 + getRandomInt(6);
+      attributes["PhysicalResistance"] = 0 + getRandomInt(6);
+      attributes["PsionicResistance"] = 0 + getRandomInt(6);
+      attributes["Fortune"] = 1 + getRandomInt(2);
   };  
 
   //Добавляем Влияние Модификаторов рангов на стартовые бонусы к статам
@@ -305,11 +307,11 @@ export const generateAgent = (
 Удача: +1 - 2
 */
   if(class_number == 1){
-      nft_hash["attributes"]["Speed"] += (1 + getRandomInt(2));
-      nft_hash["attributes"]["Evasion"] += (1 + getRandomInt(2));
-      nft_hash["attributes"]["PhysicalResistance"] += (1 + getRandomInt(3));
-      nft_hash["attributes"]["PsionicResistance"] += (1 + getRandomInt(3));
-      nft_hash["attributes"]["Fortune"] += (1 + getRandomInt(2));
+      attributes["Speed"] += (1 + getRandomInt(2));
+      attributes["Evasion"] += (1 + getRandomInt(2));
+      attributes["PhysicalResistance"] += (1 + getRandomInt(3));
+      attributes["PsionicResistance"] += (1 + getRandomInt(3));
+      attributes["Fortune"] += (1 + getRandomInt(2));
   };
 
   /*
@@ -321,11 +323,11 @@ export const generateAgent = (
 Удача: +3 - 4
 */
   if(class_number == 2){
-      nft_hash["attributes"]["Speed"] += (3 + getRandomInt(2));
-      nft_hash["attributes"]["Evasion"] += (3 + getRandomInt(2));
-      nft_hash["attributes"]["PhysicalResistance"] += (4 + getRandomInt(4));
-      nft_hash["attributes"]["PsionicResistance"] += (4 + getRandomInt(4));
-      nft_hash["attributes"]["Fortune"] += (3 + getRandomInt(2));
+      attributes["Speed"] += (3 + getRandomInt(2));
+      attributes["Evasion"] += (3 + getRandomInt(2));
+      attributes["PhysicalResistance"] += (4 + getRandomInt(4));
+      attributes["PsionicResistance"] += (4 + getRandomInt(4));
+      attributes["Fortune"] += (3 + getRandomInt(2));
   };
 
   /*
@@ -337,13 +339,18 @@ export const generateAgent = (
 Удача: +5
 */
   if(class_number == 3){
-      nft_hash["attributes"]["Speed"] += (5 + getRandomInt(2));
-      nft_hash["attributes"]["Evasion"] += (5 + getRandomInt(2));
-      nft_hash["attributes"]["PhysicalResistance"] += (8 + getRandomInt(3));
-      nft_hash["attributes"]["PsionicResistance"] += (8 + getRandomInt(3));
-      nft_hash["attributes"]["Fortune"] += 5;
+      attributes["Speed"] += (5 + getRandomInt(2));
+      attributes["Evasion"] += (5 + getRandomInt(2));
+      attributes["PhysicalResistance"] += (8 + getRandomInt(3));
+      attributes["PsionicResistance"] += (8 + getRandomInt(3));
+      attributes["Fortune"] += 5;
   };
 
+  Object.keys(attributes).forEach(function (key) {
+    nft_hash["attributes"].push({"trait_type": key,  "value": attributes[key]});
+  });
+
+  log.info(nft_hash);
   //Сохраняем в файл JSON с информацией об агенте
   var fs = require('fs');
   fs.writeFileSync(filename, JSON.stringify(nft_hash), 'utf8');
