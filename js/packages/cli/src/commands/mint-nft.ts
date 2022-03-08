@@ -117,7 +117,8 @@ export const generateAgent = (
   //Фракция: 0 - Комитет, 1 - Пикник, 2 - Церковь, 3 - Фаланга, 4 - Хлыщи
   fraction: number,
   //Модификатор: 0 - обычный, 1 - редкий, 2 - легендарный, 3 - эпический
-  mod: number
+  mod: number,
+  seller_fee_basis_points
 ) => {
   //Получаем кошелек из ключа
   const wallet = new anchor.Wallet(walletKeypair);
@@ -147,7 +148,7 @@ export const generateAgent = (
     "description": mod_names[mod] + fraction_names[fraction] + " " + class_names[class_number],
     //Комиссия которую получает создатель токена (игра), при вторичных продажах
     //Royalty basis points that goes to creators in secondary sales (0-10000).
-    "seller_fee_basis_points": 0,
+    "seller_fee_basis_points": seller_fee_basis_points,
     //Изображение токена
     "image": image_url,
     //Описание коллекции в которой будет этот NFT

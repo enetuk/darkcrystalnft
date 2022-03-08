@@ -15,6 +15,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
+
 programCommand("generate_agents")
   .option("-cn, --count-nft <number>")
   .option("--config <string>")
@@ -47,6 +48,16 @@ programCommand("generate_agents")
 Эпические: 1.25%
 */
     var mod_chances = [0.575, 0.3125, 0.1, 0.0125];
+
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+
     //Цикл по видам лутбокса (обычный - эпический)
     for(var mod=0; mod<mod_chances.length; mod++){
       //Выбираем фракцию
@@ -55,7 +66,17 @@ programCommand("generate_agents")
         var fname = "agent" + mod + "_" + i;
         var fraction = getRandomInt(5);
         log.info("fraction: " + fraction);
-        generateAgent(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", fraction, mod);
+        generateAgent(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", fraction, mod, config_json["seller_fee_basis_points"]);
+
+        //Отправляем данные в блокчейн
+        await mintNFT(
+          solConnection,
+          walletKeyPair,
+          config_json["url_path"] + generation_time + "/" + fname + ".json",
+          true,
+          undefined,
+          structuredUseMethod,
+        );  
 
       };
 
