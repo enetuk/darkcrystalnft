@@ -56,7 +56,6 @@ export const createMetadata = async (
     log.error('Invalid metadata at', metadataLink);
     return;
   }
-  log.info("eeee");
   // Validate metadata
   if (
     !metadata.name ||
@@ -359,7 +358,7 @@ export const generateAgent = (
     nft_hash["attributes"].push({"trait_type": key,  "value": attributes[key]});
   });
 
-  log.info(nft_hash);
+  log.debug(nft_hash);
   //Сохраняем в файл JSON с информацией об агенте
   var fs = require('fs');
   fs.writeFileSync(filename, JSON.stringify(nft_hash), 'utf8');
@@ -522,7 +521,7 @@ export const mintNFT = async (
 
   // Force wait for max confirmations
   await connection.getParsedConfirmedTransaction(res.txid, 'confirmed');
-  log.info('NFT created', res.txid);
+  //log.info('NFT created', res.txid);
   log.info('\n\nNFT: Mint Address is ', mint.publicKey.toBase58());
   return metadataAccount;
 };
