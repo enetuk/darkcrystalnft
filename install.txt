@@ -41,11 +41,9 @@ cd ~/darkcrystalnft/js/packages/cli && yarn install
 
 
 
-#Создаем виртуальный хост
-
-cd ~/darkcrystalnft && sudo chmod +x addvhost.sh
-
-sudo ~/darkcrystalnft/addvhost.sh
+#Устанавливаем домен
+cd ~/darkcrystalnft && sudo chmod +x setup_domain.sh
+sudo ~/darkcrystalnft/setup_domain.sh
 
 #Вводим имя домена
 

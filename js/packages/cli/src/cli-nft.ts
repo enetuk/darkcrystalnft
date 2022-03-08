@@ -69,7 +69,7 @@ programCommand("generate_agents")
         generateAgent(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", fraction, mod, config_json["seller_fee_basis_points"]);
 
         //Отправляем данные в блокчейн
-        await mintNFT(
+        var mint_pub = await mintNFT(
           solConnection,
           walletKeyPair,
           config_json["url_path"] + generation_time + "/" + fname + ".json",
@@ -77,6 +77,9 @@ programCommand("generate_agents")
           undefined,
           structuredUseMethod,
         );  
+        log.info("NFT address: " + mint_pub.toBase58());
+
+        
 
       };
 
