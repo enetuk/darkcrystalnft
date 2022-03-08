@@ -158,10 +158,18 @@ export const generateAgent = (
     },
     //Харкатеристики (заполняем ниже)
     "attributes": [
-      //{
-      //  "trait_type": "Stamina",
-      //  "value": 1
-      //}
+      {
+        "trait_type": "Fraction",
+        "value": fraction_names[fraction]
+      },
+      {
+        "trait_type": "Class",
+        "value": class_names[class_number]
+      },
+      {
+        "trait_type": "Mod",
+        "value": mod_names[mod]
+      }
     ],
     //Информация о создателе токена (кошелек игры)
     "properties": {
