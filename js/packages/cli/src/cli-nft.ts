@@ -61,11 +61,13 @@ programCommand("generate_agents")
     //Цикл по видам лутбокса (обычный - эпический)
     for(var mod=0; mod<mod_chances.length; mod++){
       //Выбираем фракцию
-      log.info("Generate mod" + mod + ": " + Math.round(countNft*mod_chances[mod]))
+      //Выводим количество NFT которые будут сгенерированы для кажого из модов
+      log.info("Count NFTs for mod №" + mod + ": " + Math.round(countNft*mod_chances[mod]))
       for(var i = 0; i<Math.round(countNft*mod_chances[mod]); i ++){
         var fname = "agent" + mod + "_" + i;
         var fraction = getRandomInt(5);
-        log.info("fraction: " + fraction);
+        log.debug("fraction: " + fraction);
+        //Генерируем агента
         generateAgent(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", fraction, mod, config_json["seller_fee_basis_points"]);
 
         //Отправляем данные в блокчейн
