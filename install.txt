@@ -1,4 +1,66 @@
+#Тестировалось на. Ubuntu
 #Обновляем Linux
 sudo apt update && sudo apt upgrade -y
 
-#
+#Устанавливаем nginx + SSL
+sudo apt install nginx certbot -y
+sudo mkdir /var/www/letsencrypt
+sudo chown www-data:www-data /var/www/letsencrypt
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
+
+#Устанавливаем Solana
+sh -c "$(curl -sSfL https://release.solana.com/v1.9.9/install)"
+
+export PATH="/home/ubuntu/.local/share/solana/install/active_release/bin:$PATH"
+
+
+
+#Устанавливаем nvm + nodejs
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+#Перед установкой должны быть настроены A-записи домена (@ + www) который будет использоваться для загрузки NFT
+
+nvm install 14.17.6
+
+npm install -g yarn 
+
+npm install ts-node
+
+#Устанавливаем код
+
+cd ~/ && git clone https://enetuk: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@github.com/enetuk/darkcrystalnft.git
+
+cd ~/darkcrystalnft/js/packages/cli && yarn install
+
+
+
+
+
+
+#Создаем виртуальный хост
+
+cd ~/darkcrystalnft && sudo chmod +x addvhost.sh
+
+sudo ~/darkcrystalnft/addvhost.sh
+
+#Вводим имя домена
+
+
+
+
+#Генерируем ключ
+solana-keygen new
+
+#Переключаемся на тестовую сеть
+solana config set --url https://api.devnet.solana.com
+
+
+#Переводим себе 2 токена в тестовой сети
+solana airdrop 2
+
+#Генерируем 2 токена
+cd ~/darkcrystalnft/ && ts-node ./js/packages/cli/src/cli-nft.ts generate_agents --keypair ~/.config/solana/id.json --count-nft 2 --config ./config.json

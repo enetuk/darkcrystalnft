@@ -38,7 +38,7 @@ programCommand("generate_agents")
     var generation_time = new Date().getTime();
     //Создаем папку для записи сгененрованных NFT-агентов
     var fs = require('fs');
-    fs.mkdirSync("./nft/" + generation_time);
+    fs.mkdirSync(config_json["file_path"] + generation_time);
 
 /*
 Шансы выпадения:
