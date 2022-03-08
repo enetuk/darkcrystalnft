@@ -77,9 +77,8 @@ programCommand("generate_agents")
           undefined,
           structuredUseMethod,
         );  
-        log.info("NFT address: " + mint_pub.toBase58());
 
-        
+
 
       };
 
