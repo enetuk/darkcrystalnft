@@ -10,13 +10,26 @@ import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 program.version('1.1.0');
 log.setLevel('info');
 
+//Генерирует случайное число от 0 до max-1
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 programCommand("generate_agents")
   .option("-cn, --count-nft <number>")
-  .option("--url-path <string>")
+  .option("--config <string>")
   .action(async (directory, cmd) => {
     //Получаем параметры запуска команды
-    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath } = cmd.opts();
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config } = cmd.opts();
+    log.info(config);
+
+    //Читаем конфиг
+    var fs = require('fs');
+    var config_json = JSON.parse(fs.readFileSync(config));
+
+
     log.info("Generate " + countNft + " agents...");
+
     //log.info(cmd.opts());
     const walletKeyPair = loadWalletKey(keypair);
 
@@ -25,10 +38,31 @@ programCommand("generate_agents")
     //Создаем папку для записи сгененрованных NFT-агентов
     var fs = require('fs');
     fs.mkdirSync("./nft/" + generation_time);
-    for(var i = 0; i<countNft; i ++){
-      generateAgent(walletKeyPair, "./nft/" + generation_time + "/agent" + i + ".json", "./nft/" + generation_time + "/agent" + i + ".png", urlPath + "/" + generation_time + "/agent" + i + ".png", 0, 0);
+
+/*
+Шансы выпадения:
+Обычные: 57.5%
+Редкие: 31.25%
+Легендарные: 10%
+Эпические: 1.25%
+*/
+    var mod_chances = [0.575, 0.3125, 0.1, 0.0125];
+    //Цикл по видам лутбокса (обычный - эпический)
+    for(var mod=0; mod<mod_chances.length; mod++){
+      //Выбираем фракцию
+      log.info("Generate mod" + mod + ": " + Math.round(countNft*mod_chances[mod]))
+      for(var i = 0; i<Math.round(countNft*mod_chances[mod]); i ++){
+        var fname = "agent" + mod + "_" + i;
+        var fraction = getRandomInt(5);
+        log.info("fraction: " + fraction);
+        generateAgent(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", fraction, mod);
+
+      };
 
     };
+
+
+
 
   });
 programCommand('mint')
