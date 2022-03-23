@@ -1,0 +1,117 @@
+Для создания и выпуска SPL-токенов (аналог ERC-20 в Etherum)  используется программа spl-token
+
+
+1. Создаем токен
+
+spl-token create-token
+
+
+В результате мы полочим адрес токена 
+
+Для управления токеном мы должны сгенерировать аккаунт для него
+
+spl-token create-account <адрас-токена>
+
+Для чеканки необходимого количества токенов мы долежы выполнить команду
+
+spl-token mint <алрес токена> <количество токенов>
+
+
+#Чтобы проверить баланс свежеотчеканненых токенов введем команду:
+
+spl-token balance <адрес токена>
+
+
+#Чтобы сжечь какое-то количество токенов, мы должны ввести комманду:
+
+spl-token burn <адрес аккаунта> <количество токенов>
+
+
+
+#Для отправки токенов получателю, необходимо выполнить команду 
+
+
+
+spl-token transfer <адрес токена> <количество токенов> <адрес получателя> --fund-recipient --allow-unfunded-recipient
+
+ключ --fund-recipient означает что аккаунт для приема токенов будет создан за наш счет
+
+В результате токены уйдут без всяких проблем
+
+
+
+#Для того чтобы у токена появилось название и иконка нужно добавить наш токен в репозитарий https://github.com/
+
+
+#Для начала копируем этот репозитарий себе (https://learn.figment.io/tutorials/sol-mint-token)
+
+
+git clone https://github.com/solana-labs/token-list
+
+В папку token-list/assets/mainnet/<mint address>/ добавляем лого нашего токена
+
+Создаем папку где <mint address> - адрес нашего токена
+mkdir token-list/assets/mainnet/<mint address>/
+
+mkdir token-list/assets/mainnet/3yJp8Bc63fecjGj7aZuUZMFUvuVcS3u8PEFD5Cgmam5m/
+
+cp path_to_logo/logo.svg token-list/assets/mainnet/3yJp8Bc63fecjGj7aZuUZMFUvuVcS3u8PEFD5Cgmam5m/logo.svg
+
+
+cp ~/Desktop/Work2/logo.svg token-list/assets/mainnet/3yJp8Bc63fecjGj7aZuUZMFUvuVcS3u8PEFD5Cgmam5m/logo.svg
+
+
+И копируем в нее лого
+
+Далее в файл token-list/src/tokens/solana.tokenlist.json добавляем информацию о нашем токене
+
+
+В данный файл необходимо дописать следующее:
+
+    {
+      "chainId": 103,
+      "address": "3yJp8Bc63fecjGj7aZuUZMFUvuVcS3u8PEFD5Cgmam5m",
+      "symbol": "DCT",
+      "name": "DarkCrystal Test Coin",
+      "decimals": 0,
+      "logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/3yJp8Bc63fecjGj7aZuUZMFUvuVcS3u8PEFD5Cgmam5m/logo.svg",
+      "tags": [
+      ],
+      "extensions": {
+      }
+    },
+
+
+
+chainId = 101 для Основной сети
+chainId = 103 для DevNet
+
+address = <адрес токена>
+symbol = название токена из несольких символов
+decimal = 0 (количество знаков посое запятой)
+logoURI = ссылка на логотип
+
+extensions -  ссылки на соцсети и сайт
+
+
+Далее мы должны создать форк репозитария для этого заходим в браузере по адресу https://github.com/solana-labs/token-list и жмем форк
+
+
+Затем в коносле переходим в папку
+
+cd token-list
+
+И выполняем команды:
+
+git remote set-url origin git@github.com:enetuk/<имя форкнутого репозитария>token-list-2
+
+пример:
+
+git remote set-url origin git@github.com:enetuk/token-list-2
+
+git add .
+
+git commit -m "first commit for DTC token"
+
+git push
+
