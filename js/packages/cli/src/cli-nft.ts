@@ -1,12 +1,15 @@
 import { program } from 'commander';
 import log from 'loglevel';
-import { generateAgent, mintNFT, updateMetadata, verifyCollection } from './commands/mint-nft';
+import { generateAgent, createLootbox, mintNFT, updateMetadata, verifyCollection } from './commands/mint-nft';
 import { getMetadata, loadWalletKey } from './helpers/accounts';
 import { parseUses } from './helpers/various';
 import { web3 } from '@project-serum/anchor';
 import { PublicKey } from '@solana/web3.js';
 import { getCluster } from './helpers/various';
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
+//Ввод значений в консоли
+import * as readline from 'readline';
+
 program.version('1.1.0');
 log.setLevel('info');
 
@@ -14,8 +17,96 @@ log.setLevel('info');
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
+//Проверка существования файла
+function fileExists(path) {
+    var fs = require('fs');
+
+  try  {
+    return fs.statSync(path).isFile();
+  }
+  catch (e) {
+
+    if (e.code == 'ENOENT') { // no such file or directory. File really does not exist
+      return false;
+    }
+
+    throw e; // something else went wrong, we don't have rights, ...
+  }
+}
 
 
+/*
+Шансы выпадения:
+Обычные: 57.5%
+Редкие: 31.25%
+Легендарные: 10%
+Эпические: 1.25%
+*/
+function modChances(){
+  return [0.575, 0.3125, 0.1, 0.0125];
+};
+
+
+//Генерирование агентов
+programCommand("create_lootboxes")
+  //Количество лутбоксов
+  .option("-cn, --count-nft <number>")
+  //Конфигурация с путями, комиссиями итд
+  .option("--config <string>")
+  //Навазние серии
+  .option("-sname --series-name <string>")
+
+  .action(async (directory, cmd) => {
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, seriesName } = cmd.opts();
+    log.info(config);
+    //Читаем конфиг
+    var fs = require('fs');
+    //Читаем конфиг
+    var config_json = JSON.parse(fs.readFileSync(config));
+    log.info("Generate " + countNft + " lootboxes...");
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
+    //Временная метка генерации
+    var generation_time = new Date().getTime();
+    //Создаем папку для записи сгененрованных NFT-агентов
+    var fs = require('fs');
+    fs.mkdirSync(config_json["file_path"] + generation_time);
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+
+    log.info("Generate NFT Series " + seriesName);
+    //Цикл по видам лутбокса (обычный - эпический)
+    for(var mod=0; mod<modChances().length; mod++){
+      log.info("Count NFT Lootboxes for mod №" + mod + ": " + Math.round(countNft*modChances()[mod]))
+      for(var i = 0; i<Math.round(countNft*modChances()[mod]); i ++){
+        var fname = "lootbox" + mod + "_" + i;
+        //Генерируем агента
+        createLootbox(walletKeyPair, config_json["file_path"] + generation_time + "/" + fname + ".json", config_json["file_path"] + generation_time + "/" + fname + ".png", config_json["url_path"] + generation_time + "/" + fname + ".png", mod, seriesName, config_json["seller_fee_basis_points"]);
+
+        //Отправляем данные в блокчейн
+        var mint_pub = await mintNFT(
+          solConnection,
+          walletKeyPair,
+          config_json["url_path"] + generation_time + "/" + fname + ".json",
+          true,
+          undefined,
+          structuredUseMethod,
+        );  
+
+
+
+      };
+
+    };
+  });
+//Генерирование агентов
 programCommand("generate_agents")
   .option("-cn, --count-nft <number>")
   .option("--config <string>")
@@ -26,12 +117,14 @@ programCommand("generate_agents")
 
     //Читаем конфиг
     var fs = require('fs');
+    //Читаем конфиг
     var config_json = JSON.parse(fs.readFileSync(config));
 
 
     log.info("Generate " + countNft + " agents...");
 
     //log.info(cmd.opts());
+    //Читаем ключ кошелька
     const walletKeyPair = loadWalletKey(keypair);
 
     //Временная метка генерации
@@ -40,14 +133,8 @@ programCommand("generate_agents")
     var fs = require('fs');
     fs.mkdirSync(config_json["file_path"] + generation_time);
 
-/*
-Шансы выпадения:
-Обычные: 57.5%
-Редкие: 31.25%
-Легендарные: 10%
-Эпические: 1.25%
-*/
-    var mod_chances = [0.575, 0.3125, 0.1, 0.0125];
+    //Шансы выпадения
+    var mod_chances = modChances();
 
     //Соединяемся с блокчейном
     const solConnection = new web3.Connection(getCluster(env));

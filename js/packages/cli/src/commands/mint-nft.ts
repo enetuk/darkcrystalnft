@@ -104,6 +104,122 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
+export const createLootbox = (
+  //Ключ создателя
+  walletKeypair: Keypair,
+  //Имя файла для сохранения информации об NFT-токене
+  filename: string,
+  //Имя файла для Изображения NFT-токена
+  image_filename: string,
+  //url Изображения NFT-токена
+  image_url: string,
+  //Модификатор: 0 - обычный, 1 - редкий, 2 - легендарный, 3 - эпический
+  mod: number,
+  series_name: string,
+  seller_fee_basis_points
+) => {
+  //Получаем кошелек из ключа
+  const wallet = new anchor.Wallet(walletKeypair);
+  if (!wallet?.publicKey) return;
+
+
+  var nft_name = modNames()[mod];
+  if(nft_name != ""){
+      nft_name = nft_name + " ";
+  };
+  nft_name = nft_name + "Lootbox"
+  //Заполняем свойства NFT-токена
+  var nft_hash = {
+    //Имя токена = модификатор + "Lootbox"
+    "name": nft_name,
+    "symbol": "",
+    //Описание токена
+    "description": nft_name,
+    //Комиссия которую получает создатель токена (игра), при вторичных продажах
+    //Royalty basis points that goes to creators in secondary sales (0-10000).
+    "seller_fee_basis_points": seller_fee_basis_points,
+    //Изображение токена
+    "image": image_url,
+    //Описание коллекции в которой будет этот NFT
+    "collection": {
+       "name": series_name,
+       "family": "DarkCrystal Lootboxes" 
+    },
+    //Харкатеристики (заполняем ниже)
+    "attributes": [
+      {
+        //Серия лутбокса
+        "trait_type": "Series",
+        "value": series_name
+      },
+      {
+        //Модификатор
+        "trait_type": "Mod",
+        "value": modNames()[mod]
+      }
+    ],
+    //Информация о создателе токена (кошелек игры)
+    "properties": {
+      "creators": [
+        {
+          "address": wallet?.publicKey.toBase58(),
+          "share": 100
+        }
+      ]
+    }
+  };
+
+  //Сохраняем в файл JSON с информацией об агенте
+  var fs = require('fs');
+  fs.writeFileSync(filename, JSON.stringify(nft_hash), 'utf8');
+  //metadata = JSON.parse(fs.readFileSync(metadataLink));
+
+  //Генерируем изображение
+
+
+  var  canvas = createCanvas(400, 400);
+  
+  //Фон для лутбокса
+  var Canvas = require('canvas');
+  var bgimg = new Canvas.Image;
+  bgimg.src = fs.readFileSync("./img_tmpls/lootbox_" + mod + ".png");
+
+
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(bgimg, 0, 0, bgimg.width, bgimg.height);
+//  ctx.fillStyle = "blue";
+//  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.font = "24px serif";
+  ctx.fillText(nft_hash["name"], 20, 40);
+
+  //Сохраняем изображение
+  fs.writeFileSync(
+    image_filename,
+    canvas.toBuffer("image/png")
+  );
+
+
+  //log.info(nft_hash);
+  return nft_hash;
+
+};
+
+  //Названия фракций
+function fractionNames(){
+  return ["Сommittee", "Picnic", "Church", "Phalanx", "Fops"];
+};
+
+  //Названия классов
+function classNames(){
+  return ["Recon", "Ranger", "Supporter", "Defender", "Assaulter"];
+};
+
+  //Названия модификаторов
+function modNames(){
+   return ["", "Rare ", "Legendary ", "Epic "];
+}
+
 export const generateAgent = (
   //Ключ создателя
   walletKeypair: Keypair,
@@ -123,13 +239,13 @@ export const generateAgent = (
   const wallet = new anchor.Wallet(walletKeypair);
   if (!wallet?.publicKey) return;
   //Названия фракций
-  var fraction_names = ["Сommittee", "Picnic", "Church", "Phalanx", "Fops"]
+  var fraction_names = fractionNames();
 
   //Названия классов
-  var class_names = ["Recon", "Ranger", "Supporter", "Defender", "Assaulter"]
+  var class_names = classNames();
 
   //Названия модификаторов
-  var mod_names = ["", "Rare ", "Legendary ", "Epic "]
+  var mod_names = modNames();
 
   
   //Случайным образом выбираем класс
@@ -137,8 +253,6 @@ export const generateAgent = (
 
 
   //Заполняем свойства NFT-токена
-
-
   var nft_hash = {
     //Имя токена модификатор + фракция + класс
     "name": mod_names[mod] + fraction_names[fraction] + " " + class_names[class_number],
