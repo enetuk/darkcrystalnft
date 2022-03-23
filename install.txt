@@ -56,6 +56,9 @@ cd ~/darkcrystalnft/js/packages/cli && yarn install
 
 
 
+#Обновление кода
+
+cd ~/darkcrystalnft && git pull
 
 
 
@@ -71,3 +74,9 @@ sudo ~/darkcrystalnft/setup_domain.sh
 
 #Генерируем 10 токенов
 cd ~/darkcrystalnft/ && ts-node ./js/packages/cli/src/cli-nft.ts generate_agents --keypair ~/.config/solana/id.json --count-nft 10 --config ./config.json
+
+
+#Генерация лутбокса
+#--series-name "Test Lootboxes" - в ковычках название серии
+
+ts-node ./js/packages/cli/src/cli-nft.ts create_lootboxes --keypair ~/.config/solana/id.json --count-nft 2 --config ./config.json --series-name "Test Lootboxes"

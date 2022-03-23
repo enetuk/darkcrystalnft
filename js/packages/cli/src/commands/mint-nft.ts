@@ -148,6 +148,10 @@ export const createLootbox = (
     //Харкатеристики (заполняем ниже)
     "attributes": [
       {
+        "trait_type": "Type",
+        "value": "Lootbox",
+      },
+      {
         //Серия лутбокса
         "trait_type": "Series",
         "value": series_name
@@ -271,6 +275,11 @@ export const generateAgent = (
     },
     //Харкатеристики (заполняем ниже)
     "attributes": [
+      {
+        "trait_type": "Type",
+        "value": "Agent"
+      },
+
       {
         "trait_type": "Fraction",
         "value": fraction_names[fraction]

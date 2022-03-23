@@ -9,6 +9,12 @@ import { getCluster } from './helpers/various';
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 //Ввод значений в консоли
 import * as readline from 'readline';
+//разбота с HTTP-протоколом
+import fetch from 'node-fetch';
+
+const { exec } = require("child_process");
+
+//import {spl_token} from "@solana/spl-token";
 
 program.version('1.1.0');
 log.setLevel('info');
@@ -46,8 +52,120 @@ function modChances(){
   return [0.575, 0.3125, 0.1, 0.0125];
 };
 
+//Сжечь NFT
+programCommand("burn_nft")
+   //Адрес токена
+  .option("-na, --nft-address <string>")
+   .option("--config <string>")
+  .action(async (directory, cmd) => {
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, nftAddress } = cmd.opts();
+    log.info("BURN NFT " + nftAddress);
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
 
-//Генерирование агентов
+    //Адрес токена
+    var nft_public_key = new PublicKey(nftAddress);
+     //Адрес аккаунта
+    var token_accounts = await solConnection.getTokenAccountsByOwner(walletKeyPair.publicKey, {mint: nft_public_key});
+    console.log(token_accounts);
+    var token_account_address = token_accounts.value[0].pubkey.toString();
+    //console.log("token_account_address=" + token_account_address);
+    var burn_cmd = "spl-token burn " + token_account_address + " 1";
+    console.log(burn_cmd);
+    exec(burn_cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.log(`error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+    });
+  });
+
+//Открытие лутбокса
+programCommand("open_lootbox")
+  //Адрес токена
+  .option("-na, --nft-address <string>")
+  //Конфигурация с путями, комиссиями итд
+  .option("--config <string>")
+  .action(async (directory, cmd) => {
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, nftAddress } = cmd.opts();
+    log.info("Open lootbox " + nftAddress);
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
+    
+     //Получаем адрес создателя токена
+    var nft_public_key = new PublicKey(nftAddress);
+    var metadataAccount = await getMetadata(nft_public_key);
+    console.log(metadataAccount);
+    console.log("account: " + metadataAccount.toBase58());
+    var info = await solConnection.getAccountInfo(metadataAccount);
+    var meta = MetadataData.deserialize(info.data);
+    var token_creator = meta.updateAuthority;
+//    log.info(meta.updateAuthority);
+  //  log.info(walletKeyPair.publicKey.toBase58());
+    log.info(meta);
+//    log.info(meta.data.uri);
+    //Получаем meta-дата лутбокса
+    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
+    console.log(metadata);
+
+    //получаем аккаунт токена
+//    solConnection.findAssociatedTokenAddress(nftAddress);
+
+   // await PublicKey.findProgramAddress();
+    //var token_accounts = await solConnection.getTokenAccountsByOwner(walletKeyPair.publicKey, {mint: nft_public_key});
+    //var token_account_address = token_accounts.value[0].pubkey.toString();
+    //console.log("token_account_address=");
+    //console.log(token_account_address);
+
+/*
+     await updateMetadata(
+      mintKey,
+      solConnection,
+      walletKeyPair,
+      url,
+      collectionKey,
+      structuredUseMethod,
+    );*/
+
+    //Сжигаем лутбокс
+
+
+    //  console.log(token_account);
+
+    //Проверяем создателя токена
+    if(token_creator != walletKeyPair.publicKey.toBase58()){
+      log.error("Address " + nftAddress + " not created by " + walletKeyPair.publicKey.toBase58());
+    }else 
+    if(metadata.data["type"] != "Lootbox"){
+      log.error("NFT " + nftAddress + " is not Lootbox");
+
+    };
+});
+
+//Генерирование лутбоксов
 programCommand("create_lootboxes")
   //Количество лутбоксов
   .option("-cn, --count-nft <number>")
