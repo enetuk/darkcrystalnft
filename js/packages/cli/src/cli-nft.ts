@@ -12,7 +12,7 @@ import * as readline from 'readline';
 //разбота с HTTP-протоколом
 import fetch from 'node-fetch';
 
-const { exec } = require("child_process");
+const { execSync } = require("child_process");
 
 //import {spl_token} from "@solana/spl-token";
 
@@ -124,8 +124,8 @@ programCommand("open_lootbox")
      //Получаем адрес создателя токена
     var nft_public_key = new PublicKey(nftAddress);
     var metadataAccount = await getMetadata(nft_public_key);
-    console.log(metadataAccount);
-    console.log("account: " + metadataAccount.toBase58());
+//    console.log(metadataAccount);
+  //  console.log("account: " + metadataAccount.toBase58());
     var info = await solConnection.getAccountInfo(metadataAccount);
     var meta = MetadataData.deserialize(info.data);
     var token_creator = meta.updateAuthority;
@@ -201,11 +201,12 @@ programCommand("open_lootbox")
           var nft_public_key = new PublicKey(nftAddress);
           //Адрес аккаунта
           var token_accounts = await solConnection.getTokenAccountsByOwner(walletKeyPair.publicKey, {mint: nft_public_key});
-          console.log(token_accounts);
+          //console.log(token_accounts);
           var token_account_address = token_accounts.value[0].pubkey.toString();
           //console.log("token_account_address=" + token_account_address);
           var burn_cmd = "spl-token burn " + token_account_address + " 1";
           console.log(burn_cmd);
+          /*
           exec(burn_cmd, (error, stdout, stderr) => {
             if (error) {
               console.log(`error: ${error.message}`);
@@ -219,10 +220,14 @@ programCommand("open_lootbox")
 
             //Получаем локальный путь из URL
             var agent_file_path = meta.data.uri.replace(config_json["url_path"], config_json["file_path"]);
-            console.log(agent_file_path);
-            generateAgent(walletKeyPair, agent_file_path, agent_file_path.replace(".json", ".png"), meta.data.uri.replace(".json", ".png"), fraction, mod, config_json["seller_fee_basis_points"]);
+            //console.log(agent_file_path);
+            //generateAgent(walletKeyPair, agent_file_path, agent_file_path.replace(".json", ".png"), meta.data.uri.replace(".json", ".png") + "?opened=1", fraction, mod, config_json["seller_fee_basis_points"]);
 
-          });
+          });*/
+
+          var exec_res = execSync(burn_cmd);
+          log.info(exec_res);
+          
            /*
           //Отправляем данные в блокчейн
           await updateMetadata(
