@@ -207,6 +207,7 @@ programCommand("open_lootbox")
           //console.log("token_account_address=" + token_account_address);
           var burn_cmd = "spl-token burn " + token_account_address + " 1";
           console.log(burn_cmd);
+          var exec_res = execSync(burn_cmd);
           /*
           exec(burn_cmd, (error, stdout, stderr) => {
             if (error) {
@@ -226,8 +227,15 @@ programCommand("open_lootbox")
 
           });*/
 
-          var exec_res = execSync(burn_cmd);
-          log.info(exec_res);
+
+          //Генерируем нового агента
+          //Получаем локальный путь из URL
+          var agent_file_path = meta.data.uri.replace(config_json["url_path"], config_json["file_path"]);
+          //console.log(agent_file_path);
+          generateAgent(walletKeyPair, agent_file_path, agent_file_path.replace(".json", ".png"), meta.data.uri.replace(".json", ".png") + "?opened=1", fraction, mod, config_json["seller_fee_basis_points"]);
+
+
+          //log.info(exec_res);
 
            /*
           //Отправляем данные в блокчейн
