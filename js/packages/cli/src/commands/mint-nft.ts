@@ -220,7 +220,7 @@ function classNames(){
 };
 
   //Названия модификаторов
-function modNames(){
+export const modNames = () => {
    return ["", "Rare ", "Legendary ", "Epic "];
 }
 
