@@ -237,7 +237,7 @@ programCommand("open_lootbox")
           var mint_pub = await mintNFT(
             solConnection,
             walletKeyPair,
-            meta.data.uri,
+            meta.data.uri + "?opened=1",
             true,
             undefined,
             structuredUseMethod,
