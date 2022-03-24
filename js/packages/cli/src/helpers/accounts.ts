@@ -6,29 +6,29 @@ import {
 } from '@solana/web3.js';
 import {
   CANDY_MACHINE,
-  CANDY_MACHINE_PROGRAM_ID,
+//  CANDY_MACHINE_PROGRAM_ID,
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
   TOKEN_METADATA_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
-  FAIR_LAUNCH_PROGRAM_ID,
-  AUCTION_HOUSE_PROGRAM_ID,
+ // FAIR_LAUNCH_PROGRAM_ID,
+  //AUCTION_HOUSE_PROGRAM_ID,
   AUCTION_HOUSE,
   FEE_PAYER,
   TREASURY,
   WRAPPED_SOL_MINT,
-  TOKEN_ENTANGLEMENT_PROGRAM_ID,
+//  TOKEN_ENTANGLEMENT_PROGRAM_ID,
   TOKEN_ENTANGLER,
   ESCROW,
   B,
   A,
-  CANDY_MACHINE_PROGRAM_V2_ID,
+  //CANDY_MACHINE_PROGRAM_V2_ID,
 } from './constants';
 import * as anchor from '@project-serum/anchor';
 import fs from 'fs';
-import {
-  createCandyMachineV2Account,
-  createConfigAccount,
-} from './instructions';
+//import {
+//  createCandyMachineV2Account,
+ // createConfigAccount,
+//} from './instructions';
 import { web3 } from '@project-serum/anchor';
 import log from 'loglevel';
 import { AccountLayout, u64 } from '@solana/spl-token';
@@ -111,7 +111,7 @@ export interface CandyMachineData {
     share: number;
   }[];
 }
-
+/*
 export const createCandyMachineV2 = async function (
   anchorProgram: anchor.Program,
   payerWallet: Keypair,
@@ -170,6 +170,8 @@ export const createCandyMachineV2 = async function (
   };
 };
 
+*/
+/*
 export const createConfig = async function (
   anchorProgram: anchor.Program,
   payerWallet: Keypair,
@@ -232,7 +234,7 @@ export const createConfig = async function (
     ),
   };
 };
-
+*/
 export function uuidFromConfigPubkey(configAccount: PublicKey) {
   return configAccount.toBase58().slice(0, 6);
 }
@@ -248,7 +250,7 @@ export const getTokenWallet = async function (
     )
   )[0];
 };
-
+/*
 export const getCandyMachineAddress = async (
   config: anchor.web3.PublicKey,
   uuid: string,
@@ -339,7 +341,7 @@ export const getFairLaunchTicketSeqLookup = async (
     FAIR_LAUNCH_PROGRAM_ID,
   );
 };
-
+*/
 export const getAtaForMint = async (
   mint: anchor.web3.PublicKey,
   buyer: anchor.web3.PublicKey,
@@ -349,7 +351,7 @@ export const getAtaForMint = async (
     SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
   );
 };
-
+/*
 export const getParticipationMint = async (
   authority: anchor.web3.PublicKey,
   uuid: string,
@@ -391,7 +393,7 @@ export const getTreasury = async (
     FAIR_LAUNCH_PROGRAM_ID,
   );
 };
-
+*/
 export const getMetadata = async (
   mint: anchor.web3.PublicKey,
 ): Promise<anchor.web3.PublicKey> => {
@@ -441,6 +443,8 @@ export const getEditionMarkPda = async (
     )
   )[0];
 };
+
+/*
 
 export const getAuctionHouse = async (
   creator: anchor.web3.PublicKey,
@@ -558,7 +562,7 @@ export const getTokenEntanglementEscrows = async (
     )),
   ];
 };
-
+*/
 export function loadWalletKey(keypair): Keypair {
   if (!keypair || keypair == '') {
     throw new Error('Keypair is required!');
@@ -569,7 +573,7 @@ export function loadWalletKey(keypair): Keypair {
   log.info(`wallet public key: ${loaded.publicKey}`);
   return loaded;
 }
-
+/*
 export async function loadCandyProgram(
   walletKeyPair: Keypair,
   env: string,
@@ -688,6 +692,7 @@ export async function loadTokenEntanglementProgream(
 
   return new anchor.Program(idl, TOKEN_ENTANGLEMENT_PROGRAM_ID, provider);
 }
+*/
 
 export async function getTokenAmount(
   anchorProgram: anchor.Program,

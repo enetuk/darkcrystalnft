@@ -5,18 +5,19 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js';
 import {
-  CANDY_MACHINE_PROGRAM_ID,
+  //CANDY_MACHINE_PROGRAM_ID,
   CONFIG_ARRAY_START,
   CONFIG_LINE_SIZE,
   SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   TOKEN_METADATA_PROGRAM_ID,
-  CONFIG_ARRAY_START_V2,
-  CANDY_MACHINE_PROGRAM_V2_ID,
+ // CONFIG_ARRAY_START_V2,
+ // CANDY_MACHINE_PROGRAM_V2_ID,
   CONFIG_LINE_SIZE_V2,
 } from './constants';
 import * as anchor from '@project-serum/anchor';
 import { CandyMachineData } from './accounts';
+
 
 export function createAssociatedTokenAccountInstruction(
   associatedTokenAddress: PublicKey,
@@ -67,6 +68,7 @@ export function createAssociatedTokenAccountInstruction(
     data: Buffer.from([]),
   });
 }
+
 
 export function createMetadataInstruction(
   metadataAccount: PublicKey,
@@ -119,6 +121,7 @@ export function createMetadataInstruction(
     data: txnData,
   });
 }
+
 
 export function createMasterEditionInstruction(
   metadataAccount: PublicKey,
@@ -183,6 +186,7 @@ export function createMasterEditionInstruction(
   });
 }
 
+/*
 export function createUpdateMetadataInstruction(
   metadataAccount: PublicKey,
   payer: PublicKey,
@@ -206,6 +210,8 @@ export function createUpdateMetadataInstruction(
     data: txnData,
   });
 }
+*/
+/*
 
 export async function createConfigAccount(
   anchorProgram,
@@ -231,7 +237,9 @@ export async function createConfigAccount(
     programId: CANDY_MACHINE_PROGRAM_ID,
   });
 }
+*/
 
+/*
 export async function createCandyMachineV2Account(
   anchorProgram,
   candyData: CandyMachineData,
@@ -256,3 +264,4 @@ export async function createCandyMachineV2Account(
     programId: CANDY_MACHINE_PROGRAM_V2_ID,
   });
 }
+*/

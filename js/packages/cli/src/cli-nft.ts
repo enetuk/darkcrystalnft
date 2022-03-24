@@ -1,6 +1,6 @@
 import { program } from 'commander';
 import log from 'loglevel';
-import { modNames, generateAgent, createLootbox, mintNFT, updateMetadata, verifyCollection } from './commands/mint-nft';
+import { modNames, generateAgent, createLootbox, mintNFT/*, updateMetadata*/, verifyCollection } from './commands/mint-nft';
 import { getMetadata, loadWalletKey } from './helpers/accounts';
 import { parseUses } from './helpers/various';
 import { web3 } from '@project-serum/anchor';
@@ -446,7 +446,7 @@ programCommand('mint')
       structuredUseMethod,
     );
   });
-
+/*
 programCommand('update-metadata')
   .option('-m, --mint <string>', 'base58 mint key')
   .option('-u, --url <string>', 'metadata url')
@@ -492,7 +492,7 @@ programCommand('update-metadata')
       structuredUseMethod,
     );
   });
-
+*/
 programCommand('verify-collection')
   .option('-m, --mint <string>', 'base58 mint key')
   .option(
