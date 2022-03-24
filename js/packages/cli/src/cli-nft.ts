@@ -13,6 +13,7 @@ import * as readline from 'readline';
 import fetch from 'node-fetch';
 
 const { execSync } = require("child_process");
+const { exec } = require("child_process");
 
 //import {spl_token} from "@solana/spl-token";
 
@@ -227,7 +228,7 @@ programCommand("open_lootbox")
 
           var exec_res = execSync(burn_cmd);
           log.info(exec_res);
-          
+
            /*
           //Отправляем данные в блокчейн
           await updateMetadata(
