@@ -4,7 +4,7 @@ import {
   createAssociatedTokenAccountInstruction,
   createMetadataInstruction,
   createMasterEditionInstruction,
-  //createUpdateMetadataInstruction,
+  createUpdateMetadataInstruction,
 } from '../helpers/instructions';
 import { sendTransactionWithRetryWithKeypair } from '../helpers/transactions';
 import {
