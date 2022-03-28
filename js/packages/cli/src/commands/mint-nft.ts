@@ -4,7 +4,7 @@ import {
   createAssociatedTokenAccountInstruction,
   createMetadataInstruction,
   createMasterEditionInstruction,
-  createUpdateMetadataInstruction,
+  //createUpdateMetadataInstruction,
 } from '../helpers/instructions';
 import { sendTransactionWithRetryWithKeypair } from '../helpers/transactions';
 import {
@@ -648,7 +648,6 @@ export const mintNFT = async (
   log.info('\n\nNFT: Mint Address is ', mint.publicKey.toBase58());
   return metadataAccount;
 };
-
 
 export const updateMetadata = async (
   mintKey: PublicKey,

@@ -53,6 +53,57 @@ function modChances(){
   return [0.575, 0.3125, 0.1, 0.0125];
 };
 
+
+
+programCommand("update_token") 
+  //Адрес токена
+  .option("-na, --nft-address <string>")
+  //Конфигурация с путями, комиссиями итд
+  .option("--config <string>")
+  .action(async (directory, cmd) => {
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, nftAddress } = cmd.opts();
+    log.info("update lootbox " + nftAddress);
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+
+    let collectionKey;
+    if (collection !== undefined) {
+      collectionKey = new PublicKey(collection);
+    }
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
+
+  
+     //Получаем адрес создателя токена для получения метаданных
+    var nft_public_key = new PublicKey(nftAddress);
+    var metadataAccount = await getMetadata(nft_public_key);
+//    console.log(metadataAccount);
+  //  console.log("account: " + metadataAccount.toBase58());
+    var info = await solConnection.getAccountInfo(metadataAccount);
+    var meta = MetadataData.deserialize(info.data);
+    var token_creator = meta.updateAuthority;
+    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
+
+
+          await updateMetadata(
+              nft_public_key,
+              solConnection,
+              walletKeyPair,
+              meta.data.uri,
+              collectionKey,
+              structuredUseMethod,
+          );
+
+  });
+
+
 //Сжечь NFT
 programCommand("burn_nft")
    //Адрес токена
@@ -95,46 +146,6 @@ programCommand("burn_nft")
     });
   });
 
-
-programCommand("update_token") 
-  //Адрес токена
-  .option("-na, --nft-address <string>")
-  //Конфигурация с путями, комиссиями итд
-  .option("--config <string>")
-  .action(async (directory, cmd) => {
-    //Получаем параметры запуска команды
-    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, nftAddress } = cmd.opts();
-    log.info("update lootbox " + nftAddress);
-    //Соединяемся с блокчейном
-    const solConnection = new web3.Connection(getCluster(env));
-
-    let collectionKey;
-    if (collection !== undefined) {
-      collectionKey = new PublicKey(collection);
-    }
-    let structuredUseMethod;
-    try {
-      structuredUseMethod = parseUses(useMethod, totalUses);
-    } catch (e) {
-      log.error(e);
-    }
-    //Читаем ключ кошелька
-    const walletKeyPair = loadWalletKey(keypair);
-
-  
-     //Получаем адрес создателя токена для получения метаданных
-    var nft_public_key = new PublicKey(nftAddress);
-    var metadataAccount = await getMetadata(nft_public_key);
-//    console.log(metadataAccount);
-  //  console.log("account: " + metadataAccount.toBase58());
-    var info = await solConnection.getAccountInfo(metadataAccount);
-    var meta = MetadataData.deserialize(info.data);
-    var token_creator = meta.updateAuthority;
-    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
-
-
-  });
-
 //Открытие лутбокса
 programCommand("open_lootbox")
   //Адрес токена
@@ -162,7 +173,7 @@ programCommand("open_lootbox")
     //Читаем ключ кошелька
     const walletKeyPair = loadWalletKey(keypair);
     
-     //Получаем адрес создателя токена для получения метаданных
+     //Получаем адрес создателя токена
     var nft_public_key = new PublicKey(nftAddress);
     var metadataAccount = await getMetadata(nft_public_key);
 //    console.log(metadataAccount);
@@ -176,17 +187,6 @@ programCommand("open_lootbox")
 //    log.info(meta.data.uri);
     //Получаем meta-дата лутбокса
     var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
-
-          //Отправляем данные в блокчейн
-          await updateMetadata(
-              nft_public_key,
-              solConnection,
-              walletKeyPair,
-              meta.data.uri,
-              collectionKey,
-              structuredUseMethod,
-          );
-
 //    console.log(metadata);
 
     //получаем аккаунт токена
@@ -256,12 +256,9 @@ programCommand("open_lootbox")
           //console.log(token_accounts);
           var token_account_address = token_accounts.value[0].pubkey.toString();
           //console.log("token_account_address=" + token_account_address);
-          /*
-          //Сжигаем
           var burn_cmd = "spl-token burn " + token_account_address + " 1";
           console.log(burn_cmd);
           var exec_res = execSync(burn_cmd);
-          */
           /*
           exec(burn_cmd, (error, stdout, stderr) => {
             if (error) {
@@ -285,23 +282,8 @@ programCommand("open_lootbox")
           //Генерируем нового агента
           //Получаем локальный путь из URL
           var agent_file_path = meta.data.uri.replace(config_json["url_path"], config_json["file_path"]);
-          
-          log.info("change nft meta " + agent_file_path + ".tmp")
-          execSync("cp " + agent_file_path + " " + agent_file_path + ".tmp")
-
           //console.log(agent_file_path);
           generateAgent(walletKeyPair, agent_file_path, agent_file_path.replace(".json", ".png"), meta.data.uri.replace(".json", ".png") + "?opened=1", fraction, mod, config_json["seller_fee_basis_points"]);
-
-
-          //Отправляем данные в блокчейн
-          await updateMetadata(
-              nft_public_key,
-              solConnection,
-              walletKeyPair,
-              meta.data.uri,
-              collectionKey,
-              structuredUseMethod,
-          );
 
 
           //log.info(exec_res);
