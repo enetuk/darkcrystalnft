@@ -186,7 +186,6 @@ export function createMasterEditionInstruction(
   });
 }
 
-/*
 export function createUpdateMetadataInstruction(
   metadataAccount: PublicKey,
   payer: PublicKey,
@@ -210,7 +209,7 @@ export function createUpdateMetadataInstruction(
     data: txnData,
   });
 }
-*/
+
 /*
 
 export async function createConfigAccount(

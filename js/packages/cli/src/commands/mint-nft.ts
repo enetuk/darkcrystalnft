@@ -4,7 +4,7 @@ import {
   createAssociatedTokenAccountInstruction,
   createMetadataInstruction,
   createMasterEditionInstruction,
-  //createUpdateMetadataInstruction,
+  createUpdateMetadataInstruction,
 } from '../helpers/instructions';
 import { sendTransactionWithRetryWithKeypair } from '../helpers/transactions';
 import {
@@ -649,7 +649,7 @@ export const mintNFT = async (
   return metadataAccount;
 };
 
-/*
+
 export const updateMetadata = async (
   mintKey: PublicKey,
   connection: Connection,
@@ -692,7 +692,6 @@ export const updateMetadata = async (
   return metadataAccount;
 };
 
-*/
 
 
 export const verifyCollection = async (
