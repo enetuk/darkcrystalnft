@@ -248,6 +248,8 @@ programCommand("open_lootbox")
         if(nft_mod < 0){
           console.error("Undefined mod " + nft_mod["value"]);
         }else{
+          /*
+          //--Старая версия
           //Сжигаем токен
           //Адрес токена
           var nft_public_key = new PublicKey(nftAddress);
@@ -259,6 +261,8 @@ programCommand("open_lootbox")
           var burn_cmd = "spl-token burn " + token_account_address + " 1";
           console.log(burn_cmd);
           var exec_res = execSync(burn_cmd);
+          //--Старая версия
+*/
           /*
           exec(burn_cmd, (error, stdout, stderr) => {
             if (error) {
@@ -288,25 +292,24 @@ programCommand("open_lootbox")
 
           //log.info(exec_res);
 
-           /*
-          //Отправляем данные в блокчейн
+                     //Отправляем данные в блокчейн
           await updateMetadata(
               nft_public_key,
               solConnection,
               walletKeyPair,
-              meta.data.uri,
+              meta.data.uri + "?opened=1",
               collectionKey,
               structuredUseMethod,
-          );*/
+          );
           //Отправляем данные в блокчейн
-          var mint_pub = await mintNFT(
+          /*var mint_pub = await mintNFT(
             solConnection,
             walletKeyPair,
             meta.data.uri + "?opened=1",
             true,
             undefined,
             structuredUseMethod,
-          );  
+          );*/  
 
 
         };

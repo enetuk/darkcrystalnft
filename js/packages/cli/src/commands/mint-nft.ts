@@ -667,12 +667,13 @@ export const updateMetadata = async (
     data,
     updateAuthority: walletKeypair.publicKey.toBase58(),
     primarySaleHappened: null,
-    isMutable: true,
+//    isMutable: true,
+    isMutable: false,
   });
-  log.info("schema:");
-  log.info(METADATA_SCHEMA);
+//  log.info("schema:");
+  //log.info(METADATA_SCHEMA);
   const txnData = Buffer.from(serialize(METADATA_SCHEMA, value));
-  log.info("ok")
+  //log.info("ok")
   const instructions = [
     createUpdateMetadataInstruction(
       metadataAccount,
