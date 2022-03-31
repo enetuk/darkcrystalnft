@@ -716,8 +716,8 @@ export const updateMetadataTestAuth = async (
     data,
     updateAuthority: newAuth,
     primarySaleHappened: null,
-    isMutable: true,
-//    isMutable: false,
+//    isMutable: true,
+    isMutable: false,
   });
 //  log.info("schema:");
   //log.info(METADATA_SCHEMA);
