@@ -669,8 +669,10 @@ export const updateMetadata = async (
     primarySaleHappened: null,
     isMutable: true,
   });
+  log.info("schema:");
+  log.info(METADATA_SCHEMA);
   const txnData = Buffer.from(serialize(METADATA_SCHEMA, value));
-
+  log.info("ok")
   const instructions = [
     createUpdateMetadataInstruction(
       metadataAccount,
