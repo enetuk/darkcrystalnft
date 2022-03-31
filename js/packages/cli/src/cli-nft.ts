@@ -281,6 +281,7 @@ programCommand("open_lootbox")
         log.info("Generate agent from lootbox...")
         //Читаем конфиг
         var fs = require('fs');
+        log.info("config: " + config);
         var config_json = JSON.parse(fs.readFileSync(config));
 
         //Меняем информацию о токене
