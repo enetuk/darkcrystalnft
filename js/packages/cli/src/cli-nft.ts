@@ -1,6 +1,6 @@
 import { program } from 'commander';
 import log from 'loglevel';
-import { modNames, generateAgent, createLootbox, mintNFT, updateMetadata, verifyCollection } from './commands/mint-nft';
+import { modNames, generateAgent, createLootbox, mintNFT, updateMetadata, updateMetadataTestAuth, verifyCollection } from './commands/mint-nft';
 import { getMetadata, loadWalletKey } from './helpers/accounts';
 import { parseUses } from './helpers/various';
 import { web3 } from '@project-serum/anchor';
@@ -53,7 +53,59 @@ function modChances(){
   return [0.575, 0.3125, 0.1, 0.0125];
 };
 
+//Тестирование обновлния updateAuthority
+programCommand("test_update_auth")
+  //Адрес токена
+  .option("-na, --nft-address <string>")
+  //Новый updateAuthority
+  .option("-na2, --new-auth <string>")
+  //Конфигурация с путями, комиссиями итд
+  .option("--config <string>")
+  .action(async (directory, cmd) => {
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, config, nftAddress, newAuth } = cmd.opts();
+    log.info("update token " + nftAddress + ", set updateAuthority=" + newAuth);
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
 
+    let collectionKey;
+    if (collection !== undefined) {
+      collectionKey = new PublicKey(collection);
+    }
+    let structuredUseMethod;
+    try {
+      structuredUseMethod = parseUses(useMethod, totalUses);
+    } catch (e) {
+      log.error(e);
+    }
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
+
+  
+     //Получаем адрес создателя токена для получения метаданных
+    var nft_public_key = new PublicKey(nftAddress);
+    var metadataAccount = await getMetadata(nft_public_key);
+//    console.log(metadataAccount);
+  //  console.log("account: " + metadataAccount.toBase58());
+    var info = await solConnection.getAccountInfo(metadataAccount);
+    var meta = MetadataData.deserialize(info.data);
+    var token_creator = meta.updateAuthority;
+    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
+
+
+          await updateMetadataTestAuth(
+              nft_public_key,
+              solConnection,
+              walletKeyPair,
+              meta.data.uri,
+              collectionKey,
+              structuredUseMethod,
+              newAuth
+          );
+
+
+
+})
 
 programCommand("update_token") 
   //Адрес токена

@@ -696,6 +696,54 @@ export const updateMetadata = async (
 
 
 
+export const updateMetadataTestAuth = async (
+  mintKey: PublicKey,
+  connection: Connection,
+  walletKeypair: Keypair,
+  metadataLink: string,
+  collection: PublicKey = null,
+  uses: Uses,
+  newAuth: string,
+): Promise<PublicKey | void> => {
+  // Retrieve metadata
+  metadataLink = metadataLink + "&test=1"
+  const data = await createMetadata(metadataLink, collection, uses);
+  if (!data) return;
+
+  const metadataAccount = await getMetadata(mintKey);
+  const signers: anchor.web3.Keypair[] = [];
+  const value = new UpdateMetadataV2Args({
+    data,
+    updateAuthority: newAuth,
+    primarySaleHappened: null,
+    isMutable: true,
+//    isMutable: false,
+  });
+//  log.info("schema:");
+  //log.info(METADATA_SCHEMA);
+  const txnData = Buffer.from(serialize(METADATA_SCHEMA, value));
+  //log.info("ok")
+  const instructions = [
+    createUpdateMetadataInstruction(
+      metadataAccount,
+      walletKeypair.publicKey,
+      txnData,
+    ),
+  ];
+
+  // Execute transaction
+  const txid = await sendTransactionWithRetryWithKeypair(
+    connection,
+    walletKeypair,
+    instructions,
+    signers,
+  );
+  console.log('Metadata updated', txid);
+  log.info('\n\nUpdated NFT: Mint Address is ', mintKey.toBase58());
+  return metadataAccount;
+};
+
+
 export const verifyCollection = async (
   mintKey: PublicKey,
   connection: Connection,
