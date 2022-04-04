@@ -52,6 +52,40 @@ function fileExists(path) {
 function modChances(){
   return [0.575, 0.3125, 0.1, 0.0125];
 };
+//Тестирование обновлния updateAuthority
+programCommand("transactions")
+
+  .action(async (directory, cmd) => {
+
+    //Получаем параметры запуска команды
+    const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, newAuth } = cmd.opts();
+    //Читаем ключ кошелька
+    const walletKeyPair = loadWalletKey(keypair);
+    log.info("Get transactions for " + walletKeyPair.publicKey);
+
+    //Соединяемся с блокчейном
+    const solConnection = new web3.Connection(getCluster(env));
+    //Получаем 10 последних транзакций
+    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey, {limit: 10});
+    for(var i = 0; i < txs.length; i++){
+      log.info(txs[i]);
+      //Получаем информацию о транзакции
+      var tx_info = await solConnection.getConfirmedTransaction(txs[i].signature);
+      log.info("tx info:");
+      log.info(tx_info);
+      log.info("---");
+    };
+//    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
+
+
+    //
+    //var data = await (await fetch("https://public-api.solscan.io/account/transactions?account=" + walletKeyPair.publicKey + "&limit=10", { method: 'GET' , headers: {'User-Agent': 'curl/7.77.0', 'Content-Type': 'application/json', 'Accept': 'application/json'}})).text();
+
+
+    
+
+    //log.info(data);
+})
 
 //Тестирование обновлния updateAuthority
 programCommand("test_update_auth")
