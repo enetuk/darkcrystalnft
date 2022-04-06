@@ -66,8 +66,15 @@ programCommand("transactions")
     //Соединяемся с блокчейном
     const solConnection = new web3.Connection(getCluster(env));
     //Получаем 10 последних транзакций
-    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey, {limit: 10});
+//    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey, {limit: 10});
+//    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey);
+  var pk = new PublicKey("85N6whQuPHZGmXiE6QfN3totfv6zUHk3siYYtz1EtFvu")
+
+    var txs = await solConnection.getConfirmedSignaturesForAddress2(pk, {limit: 1000});
+
+    
     for(var i = 0; i < txs.length; i++){
+      log.info("N" + i);
       log.info(txs[i]);
       //Получаем информацию о транзакции
       var tx_info = await solConnection.getConfirmedTransaction(txs[i].signature);
