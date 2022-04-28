@@ -376,7 +376,7 @@ programCommand("open_lootbox")
 
 });
 
-//Генерирование лутбоксов
+//Генерирование nft-лутбоксов
 programCommand("create_lootboxes")
   //Количество лутбоксов
   .option("-cn, --count-nft <number>")
@@ -435,7 +435,7 @@ programCommand("create_lootboxes")
 
     };
   });
-//Генерирование агентов
+//Генерирование агентов агентов
 programCommand("generate_agents")
   .option("-cn, --count-nft <number>")
   .option("--config <string>")
@@ -506,7 +506,7 @@ programCommand("generate_agents")
 
 
   });
-  
+
 program
   .command('show')
   .option(
