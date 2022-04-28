@@ -61,7 +61,7 @@ programCommand("transactions")
     const { keypair, env, url, collection, useMethod, totalUses,countNft, urlPath, newAuth } = cmd.opts();
     //Читаем ключ кошелька
     const walletKeyPair = loadWalletKey(keypair);
-    log.info("Get transactions for " + walletKeyPair.publicKey);
+   // log.info("Get transactions for " + walletKeyPair.publicKey);
 
     //Соединяемся с блокчейном
     const solConnection = new web3.Connection(getCluster(env));
@@ -69,10 +69,17 @@ programCommand("transactions")
 //    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey, {limit: 10});
 //    var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey);
   var pk = new PublicKey("85N6whQuPHZGmXiE6QfN3totfv6zUHk3siYYtz1EtFvu")
+    log.info("Get transactions for " + pk);
 
-    var txs = await solConnection.getConfirmedSignaturesForAddress2(pk, {limit: 1000});
+    //var txs = await solConnection.getConfirmedSignaturesForAddress2(pk, {limit: 1000});
 
-    
+    //log.info(txs.length);
+
+var txs = await solConnection.getConfirmedSignaturesForAddress2(pk, {limit: 1000});
+//        var txs = await solConnection.getConfirmedSignaturesForAddress2(walletKeyPair.publicKey, {limit: 1000});
+    log.info(txs.length);
+
+    /*
     for(var i = 0; i < txs.length; i++){
       log.info("N" + i);
       log.info(txs[i]);
@@ -81,7 +88,7 @@ programCommand("transactions")
       log.info("tx info:");
       log.info(tx_info);
       log.info("---");
-    };
+    };*/
 //    var metadata = await (await fetch(meta.data.uri, { method: 'GET' })).json();
 
 
@@ -499,106 +506,7 @@ programCommand("generate_agents")
 
 
   });
-programCommand('mint')
-  .option('-u, --url <string>', 'metadata url')
-  .option(
-    '-c, --collection <string>',
-    'Optional: Set this NFT as a part of a collection, Note you must be updat authority for this to work.',
-  )
-  .option('-um, --use-method <string>', 'Optional: Single, Multiple, or Burn')
-  .option('-tum, --total-uses <number>', 'Optional: Allowed Number of Uses')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  .action(async (directory, cmd) => {
-    const { keypair, env, url, collection, useMethod, totalUses } = cmd.opts();
-    const solConnection = new web3.Connection(getCluster(env));
-    let structuredUseMethod;
-    try {
-      structuredUseMethod = parseUses(useMethod, totalUses);
-    } catch (e) {
-      log.error(e);
-    }
-    const walletKeyPair = loadWalletKey(keypair);
-    let collectionKey;
-    if (collection !== undefined) {
-      collectionKey = new PublicKey(collection);
-    }
-    await mintNFT(
-      solConnection,
-      walletKeyPair,
-      url,
-      true,
-      collectionKey,
-      structuredUseMethod,
-    );
-  });
-/*
-programCommand('update-metadata')
-  .option('-m, --mint <string>', 'base58 mint key')
-  .option('-u, --url <string>', 'metadata url')
-  .option(
-    '-c, --collection <string>',
-    'Optional: Set this NFT as a part of a collection, Note you must be updat authority for this to work.',
-  )
-  .option('-um, --use-method <string>', 'Optional: Single, Multiple, or Burn')
-  .option('-tum, --total-uses <number>', 'Optional: Allowed Number of Uses')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  .action(async (directory, cmd) => {
-    const { keypair, env, mint, url, collection, useMethod, totalUses } =
-      cmd.opts();
-    const mintKey = new PublicKey(mint);
-    const solConnection = new web3.Connection(getCluster(env));
-    const walletKeyPair = loadWalletKey(keypair);
-    let structuredUseMethod;
-    try {
-      structuredUseMethod = parseUses(useMethod, totalUses);
-      if (structuredUseMethod) {
-        const info = await solConnection.getAccountInfo(mintKey);
-        const meta = MetadataData.deserialize(info.data);
-        if (meta?.uses && meta.uses.total > meta.uses.remaining) {
-          log.error(
-            'FAILED: This call will fail if you have used the NFT, you cannot change USES after using.',
-          );
-          return;
-        }
-      }
-    } catch (e) {
-      log.error(e);
-    }
-    let collectionKey;
-    if (collection) {
-      collectionKey = new PublicKey(collection);
-    }
-    await updateMetadata(
-      mintKey,
-      solConnection,
-      walletKeyPair,
-      url,
-      collectionKey,
-      structuredUseMethod,
-    );
-  });
-*/
-programCommand('verify-collection')
-  .option('-m, --mint <string>', 'base58 mint key')
-  .option(
-    '-c, --collection-mint <string>',
-    'base58 mint key: A collection is an NFT that can be verified as the collection for this nft',
-  )
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  .action(async (directory, cmd) => {
-    const { keypair, env, mint, collectionMint } = cmd.opts();
-    const mintKey = new PublicKey(mint);
-    const collectionMintKey = new PublicKey(collectionMint);
-    const solConnection = new web3.Connection(getCluster(env));
-    const walletKeyPair = loadWalletKey(keypair);
-    await verifyCollection(
-      mintKey,
-      solConnection,
-      walletKeyPair,
-      collectionMintKey,
-    );
-  });
-
+  
 program
   .command('show')
   .option(
